@@ -2,7 +2,7 @@ const assert = require('assert');
 const ganache = require('ganache');
 const { Web3 } = require('web3');
 const web3 = new Web3(ganache.provider());
-const { interface, bytecode } = require('../compile');
+const { abi, evm } = require('../compile');
 
 const INITIAL_MESSAGE = 'Hi there!';
 
@@ -15,8 +15,8 @@ beforeEach(async () => {
 
   // use one of those accounts to deploy 
   // the contract
-  inbox = await new web3.eth.Contract(JSON.parse(interface))        // there is a contract with this interface (ABI)
-    .deploy({ data: bytecode, arguments: [INITIAL_MESSAGE] })           // want to deploy a new copy (incl constructor args) 
+  inbox = await new web3.eth.Contract(abi)        // there is a contract with this interface (ABI)
+    .deploy({ data: evm.bytecode.object, arguments: [INITIAL_MESSAGE] })           // want to deploy a new copy (incl constructor args) 
     .send({ from: accounts[0], gas: '1000000' });                    // creates the transaction and sends this to eth
 });
 
